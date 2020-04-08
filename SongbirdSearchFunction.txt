@@ -1,0 +1,26 @@
+2/9/2020
+
+This will be the search algorithm behind the search bar.
+
+1. User will input string s1 into the search bar.
+	s1 = "Take Me Home, Country Roads"
+
+2. s1 has all nonalphanumeric characters and non-spaces are removed.
+	s1 = "Take Me Home Country Roads"
+
+3. The database will be binary searched starting with the leftmost character of s1 and moving rightward.
+Song titles that have the most matching characters will be prioritized in the search. The comparison will be
+case insensitive.
+
+The first n slots will be filled with results that closely match s1 character by character.
+
+4. s1 will be parsed into individual words along the spaces in the string. The words will become a list.
+
+s1 = [Take, Me, Home, Country, Roads]
+
+5. The song titles with the most words that match the words in the list will be ranked the highest.
+Keyword tags associated with songs will increase this ranking.
+
+6. Take the top results as hypertext links and output them to a list.
+print the list in a vertical column as the results of the search.
+

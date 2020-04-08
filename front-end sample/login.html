@@ -1,0 +1,95 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackateam</title>
+    <link rel="stylesheet" href="signin_up.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet"> 
+</head>
+<body>
+    <section>
+        <div class="box">
+            <h1>Hackateam Login</h1>
+            <input type="text" id="loginemail" placeholder="Email">
+            <input type="password" id="loginpassword" placeholder="Password">
+            <input type="submit" onclick="toggleSignIn()" id="quickstart-sign-in" value="Login">
+
+            <div class="bottom-text">
+                Don't have account? <a href="signup.html">Sign up</a>
+            </div>
+        </div>
+    </section>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+
+    <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyCU39Ta1HE6W76vmWWrbYhtwdCJ2BQFRuw",
+        authDomain: "hackathonmatchuser-ae625.firebaseapp.com",
+        databaseURL: "https://hackathonmatchuser-ae625.firebaseio.com",
+        projectId: "hackathonmatchuser-ae625",
+        storageBucket: "hackathonmatchuser-ae625.appspot.com",
+        messagingSenderId: "214192263433",
+        appId: "1:214192263433:web:ff6f9790fa5db1670983d8",
+        measurementId: "G-3ZXZFWX2BJ"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+        let firestore = firebase.firestore();
+        let fireauth = firebase.auth();
+        console.log("Cloud Firestores Loaded");
+
+        function toggleSignIn() {
+        if (fireauth.currentUser) {
+            // [START signout]
+            fireauth.signOut();
+            // [END signout]
+        } else {
+            var email = document.getElementById('loginemail').value;
+            var password = document.getElementById('loginpassword').value;
+            if (email.length < 4) {
+            alert('Please enter an email address.');
+            return;
+            }
+            if (password.length < 4) {
+            alert('Please enter a password.');
+            return;
+            }
+            // Sign in with email and pass.
+            // [START authwithemail]
+            fireauth.signInWithEmailAndPassword(email, password).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // [START_EXCLUDE]
+            if (errorCode === 'auth/wrong-password') {
+                alert('Wrong password.');
+            } else {
+                alert(errorMessage);
+            }
+            console.log(error);
+            document.getElementById('quickstart-sign-in').disabled = false;
+            // [END_EXCLUDE]
+            });
+            // [END authwithemail]
+        }
+        document.getElementById('quickstart-sign-in').disabled = false;
+        fireauth.onAuthStateChanged(user => {
+        if(user) {
+        window.location = 'homepage.html'; //After successful login, user will be redirected to home.html
+  }
+});
+        }
+
+</script>
+
+</body>
+</html>
