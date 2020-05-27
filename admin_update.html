@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="mainpages.css">
+		<title>SongBird</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<!-- Popper JS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
+		<style>
+		a {
+			color: #FFFFFF;
+		}
+
+		</style>
+	</head>
+
+	<body>
+		<section>
+			<div>
+				<div class='navbar'>
+					<div class='logo'> SONGBIRD | </div>
+					<div class='navbar-item'>
+						<nav>
+							<ul>
+								<li><a href="#">Home</a></li>
+								<li><a href="#">About</a></li>
+								<li><a href="userlogin.html">Sign Out</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+            <h1 class="name">Song Bird</h1>
+            <p style="color:red" align="stretch"><strong>* Please remember to fill in all the fields</strong></p>
+			<div class="radio">
+				<div>
+                    <input type="radio" name="Rock" id="Rock" value="Rock"><label for="Rock">Rock</label><br /></div>
+                    <div><input type="radio" name="Classical" id="Classical" value="Classical"><label for="Classcial">Classical</label><br /></div>
+                    <div> <input type="radio" name="Country" id="Country" value="Country"><label for="Country">Country</label><br /></div>
+                    <div> <input type="radio" name="Folk" id="Folk" value="Folk"><label for="Folk">Folk</label><br /></div>
+                    <div> <input type="radio" name="EDM" id="EDM" value="EDM"><label for="EDM">EDM</label><br /></div>
+                    <div> <input type="radio" name="Heavy Metal" id="Heavy Metal" value="Heavy Metal"><label for="Heavy Metal">Heavy Metal</label><br /></div>
+                    <div> <input type="radio" name="Hip-hop" id="Hip-hop" value="Hip-hop"><label for="Hip-hop">Hip-hop</label><br /></div>
+                    <div><input type="radio" name="Jazz" id="Jazz" value="Jazz"><label for="Jazz">Jazz</label><br /></div>
+                    <div><input type="radio" name="Pop" id="Pop" value="Pop"><label for="Pop">Pop</label><br /></div>
+                    <div><input type="radio" name="Popular" id="Popular" value="Popular"><label for>Popular</label><br /></div>
+                    <div><input type="radio" name="Rap" id="Rap" value="Rap"><label for="Rap">Rap</label><br /></div>
+                    <div><input type="radio" name="Soul" id="Soul" value="Soul"><label for="Soul">Soul</label><br /></div>
+			</div>
+			<!-- <select id="category" name="category">
+                    <option disabled selected value> -- select an option -- </option>
+                    <option value="Rock">Rock</option>
+                    <option value="Classical">Classical</option>
+                    <option value="Country">Country</option>
+                    <option value="Folk">Folk</option>
+                    <option value="EDM">EDM</option>
+                    <option value="Heavy Metal">Heavy Metal</option>
+                    <option value="Hip-hop">Hip-hop</option>
+                    <option value="Jazz">Jazz</option>
+                    <option value="Pop">Pop</option>
+                    <option value="Popular">Popular</option>
+                    <option value="Rap">Rap</option>
+                    <option value="Soul">Soul</option>
+                </select> -->
+			<div class="box">
+				<div>
+					<input type="text" id="songname" placeholder="Song Name" required>
+				</div>
+				<div>
+					<input type="text" id="singername" placeholder="Singer Name" required>
+				</div>
+				<div>
+					<input type="text" id="ytlink" placeholder="Youtube Link" required>
+				</div>
+				<div>
+					<input type="text" id="aulink" placeholder="Audio Link" required>
+				</div>
+				<div>
+					<input type="submit" onclick="Ulog()" value="Add Song">
+				</div>
+			</div>
+			</form>
+		</section>
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+		<!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+		<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+			apiKey: "AIzaSyD3c-oXqcJymdtt_Ou1LlVX0XwKGJqACFI",
+			authDomain: "songbird-180a0.firebaseapp.com",
+			databaseURL: "https://songbird-180a0.firebaseio.com",
+			projectId: "songbird-180a0",
+			storageBucket: "songbird-180a0.appspot.com",
+			messagingSenderId: "466577404888",
+			appId: "1:466577404888:web:6752375e0175c39af4b8ad",
+			measurementId: "G-G61252WJTY"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();
+		let firestore = firebase.firestore();
+		console.log("Cloud Firestores Loaded");
+
+		function Ulog() {
+			//Saving data
+			const categoryname = document.getElementById("category");
+			const songnames = document.getElementById('songname');
+			const singernames = document.getElementById('singername');
+			const youtubelink = document.getElementById('ytlink');
+			const audiolink = document.getElementById('aulink');
+			console.log(songnames.value, singernames.value, youtubelink.value, audiolink.value);
+			// var e = document.getElementById("category");
+			// var strUser = e.options[e.selectedIndex].value;
+			if(document.getElementById('Rock').checked) {
+				firestore.collection("Song").doc("Rock").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else if(document.getElementById('Classical').checked) {
+				firestore.collection("Song").doc("Classical").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else if(document.getElementById('Country').checked) {
+				firestore.collection("Song").doc("Country").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else if(document.getElementById('EDM').checked) {
+				firestore.collection("Song").doc("EDM").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else if(document.getElementById('Folk').checked) {
+				firestore.collection("Song").doc("Folk").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else if(document.getElementById('Heavy Metal').checked) {
+				firestore.collection("Song").doc("Heavy Metal").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else if(document.getElementById('Hip-hop').checked) {
+				firestore.collection("Song").doc("Hip-hop").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else if(document.getElementById('Jazz').checked) {
+				firestore.collection("Song").doc("Jazz").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else if(document.getElementById('Pop').checked) {
+				firestore.collection("Song").doc("Pop").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else if(document.getElementById('Popular').checked) {
+				firestore.collection("Song").doc("Popular").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else if(document.getElementById('Rap').checked) {
+				firestore.collection("Song").doc("Rap").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					console.log("Document successfully written!");
+					window.location = 'admin_update.html'
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			} else {
+				firestore.collection("Song").doc("Soul").collection("songs").doc(songnames.value).set({
+					song_name: songnames.value,
+					singer_name: singernames.value,
+					youtube_link: youtubelink.value,
+					audio_link: audiolink.value
+				}).then(function() {
+					window.location = 'admin_update.html';
+					console.log("Document successfully written!");
+				}).catch(function(error) {
+					console.error("Error writing document: ", error);
+				})
+			}
+		}
+
+		</script>
+	</body>
+
+</html>

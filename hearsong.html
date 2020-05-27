@@ -1,8 +1,347 @@
-<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<!DOCTYPE html>
+<html lang="en">
 
-<p>
-    This code allows for the embedding of YouTube videos directly into a webpage.<br>
-    By embedding a video instead of natively hosting an audio file, we can avoid copyright
-    issues associated with allowing people to hear the music for free.
-</p>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SongBird</title>
+	<link rel="stylesheet" href="mainpages.css">
+	<link rel="stylesheet" href="freeformatter-out.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
+</head>
+
+<body>
+	<section>
+		<div>
+			<div class='navbar'>
+				<div class='logo'> SongBird | </div>
+				<div class='navbar-item'>
+					<nav>
+						<ul>
+							<li><a href="homepage.html">Home</a></li>
+							<li><a href="category.html">Category</a></li>
+							<li><a href="aboutus.html">About</a></li>
+							<li><a href="userlogin.html">Sign Out</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div>
+	<h1 id="name" style="text-align: center"></h1> 
+	<h2 id="singername" style="text-align: center"></h2>
+	<iframe id="songvideo" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	<p> This code allows for the embedding of YouTube videos directly into a webpage.<br> By embedding a video instead of natively hosting an audio file, we can avoid copyright issues associated with allowing people to hear the music for free. </p>
+	</div>
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+	<script>
+	// Your web app's Firebase configuration
+	var firebaseConfig = {
+		apiKey: "AIzaSyD3c-oXqcJymdtt_Ou1LlVX0XwKGJqACFI",
+		authDomain: "songbird-180a0.firebaseapp.com",
+		databaseURL: "https://songbird-180a0.firebaseio.com",
+		projectId: "songbird-180a0",
+		storageBucket: "songbird-180a0.appspot.com",
+		messagingSenderId: "466577404888",
+		appId: "1:466577404888:web:6752375e0175c39af4b8ad",
+		measurementId: "G-G61252WJTY"
+	};
+	// Initialize Firebase
+	var app = firebase.initializeApp(firebaseConfig);
+	db = firebase.firestore(app);
+	firebase.analytics();
+	let firestore = firebase.firestore();
+	console.log("Cloud Firestores Loaded");
+	window.onload = async function outdetails() {
+		var selectedone = localStorage.getItem("category");
+		var selectedtwo = localStorage.getItem("song");
+		// alert(selectedone);
+		// alert(selectedtwo);
+		if(selectedone == "Popular") {
+			await db.collection("Song").doc("Popular").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "Country") {
+			await db.collection("Song").doc("Country").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "Classical") {
+			await db.collection("Song").doc("Classical").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "EDM") {
+			await db.collection("Song").doc("EDM").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "Folk") {
+			await db.collection("Song").doc("Folk").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "Heavy Metal") {
+			await db.collection("Song").doc("Heavy Metal").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "Hip-hop") {
+			await db.collection("Song").doc("Hip-hop").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "Jazz") {
+			await db.collection("Song").doc("Jazz").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "Pop") {
+			await db.collection("Song").doc("Pop").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "Rap") {
+			await db.collection("Song").doc("Rap").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "Rock") {
+			await db.collection("Song").doc("Rock").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else if (selectedone == "Soul") {
+			await db.collection("Song").doc("Soul").collection("songs").doc(selectedtwo).get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data().youtube_link);
+					const songVideo = document.getElementById("songvideo");
+					var node = document.createElement("a");
+					document.getElementById("name").innerHTML = doc.data().song_name;
+					document.getElementById("singername").innerHTML = doc.data().singer_name;
+					var video = document.createElement("iframe");
+					
+					document.getElementById("songvideo").src = doc.data().youtube_link;
+					
+					node.appendChild(video);
+					songVideo.appendChild(node);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+		} else {
+			alert("Other")
+		}
+	}
+	</script>
+
+
+
+</body>
+
+</html>

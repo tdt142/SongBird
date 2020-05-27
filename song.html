@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SongBird</title>
+	<link rel="stylesheet" href="mainpages.css">
+	<link rel="stylesheet" href="freeformatter-out.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
+
+</head>
+
+<body>
+	<section>
+		<div>
+			<div class='navbar'>
+				<div class='logo'> SongBird | </div>
+				<div class='navbar-item'>
+					<nav>
+						<ul>
+							<li><a href="aboutus.html">Home</a></li>
+							<li><a href="category.html">Category</a></li>
+							<li><a href="aboutus.html">About</a></li>
+							<li><a href="userlogin.html">Sign Out</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section> Welcome .... <span id="result"></span>
+	<br />
+	<p id="demo"></p>
+	<a id="songlist"></a>
+
+	</p>
+	<br />
+	<!-- <ul id="songlist">
+	</ul> -->
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+	<script>
+	// Your web app's Firebase configuration
+	var firebaseConfig = {
+		apiKey: "AIzaSyD3c-oXqcJymdtt_Ou1LlVX0XwKGJqACFI",
+		authDomain: "songbird-180a0.firebaseapp.com",
+		databaseURL: "https://songbird-180a0.firebaseio.com",
+		projectId: "songbird-180a0",
+		storageBucket: "songbird-180a0.appspot.com",
+		messagingSenderId: "466577404888",
+		appId: "1:466577404888:web:6752375e0175c39af4b8ad",
+		measurementId: "G-G61252WJTY"
+	};
+	// Initialize Firebase
+	var app = firebase.initializeApp(firebaseConfig);
+	db = firebase.firestore(app);
+	firebase.analytics();
+	let firestore = firebase.firestore();
+	console.log("Cloud Firestores Loaded");
+
+	window.onload = async function outsong() {
+		var selected = localStorage.getItem("category")
+		document.getElementById("result").innerHTML = selected;
+		var result = [];
+		if(selected == "Popular") {
+			await db.collection("Song").doc("Popular").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "Country") {
+			await db.collection("Song").doc("Country").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "EDM") {
+			await db.collection("Song").doc("EDM").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "Folk") {
+			await db.collection("Song").doc("Folk").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "Heavy Metal") {
+			await db.collection("Song").doc("Heavy Metal").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "Hip-hop") {
+			await db.collection("Song").doc("Hip-hop").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "Jazz") {
+			await db.collection("Song").doc("Jazz").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "Pop") {
+			await db.collection("Song").doc("Pop").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "Rap") {
+			await db.collection("Song").doc("Rap").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "Rock") {
+			await db.collection("Song").doc("Rock").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "Soul") {
+			await db.collection("Song").doc("Soul").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else if(selected == "Classical") {
+			await db.collection("Song").doc("Classical").collection("songs").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					result.push(doc.data());
+				});
+			});
+			console.log(result.length);
+			const songList = document.getElementById("songlist");
+			for(let a = 0; a < result.length; a++) {
+				var node = document.createElement("li");
+				
+				var link = document.createElement('input');
+				link.setAttribute('type','submit');
+				link.setAttribute('onclick', "hello(this)");
+				link.setAttribute("value", result[a].song_name); 
+				link.innerText = result[a].song_name;
+				
+				node.appendChild(link);
+				songList.appendChild(node);
+				console.log(result[a].song_name);
+			}
+		} else {
+			alert("Other")
+		}
+	}
+	// document.getElementById("songlist").addEventListener("click", callback, true);
+	function hello(lnk) {
+
+	 	// // var node = document.createElement("p");
+		// // var textnode = document.createTextNode(result[a].song_name);
+		alert(lnk.getAttribute('value'));
+		chosentwo = lnk.getAttribute('value')
+		localStorage.setItem("song", chosentwo);
+		window.location.assign("hearsong.html");
+
+	// 	alert("clicked");
+
+	// return false;
+			// document.getElementById("songlist").setAttribute("value", "In Progress");
+			// var x = document.getElementById("songlist").getAttribute("value");
+			// alert(x)
+	}
+	</script>

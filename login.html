@@ -1,21 +1,24 @@
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hackateam</title>
-    <link rel="stylesheet" href="signin_up.css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet"> 
-</head>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <meta name="HandheldFriendly" content="true">
+      <title>Hackateam</title>
+      <link rel="stylesheet" href="style.css">
+      <link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
+   </head>
 <body>
     <section>
         <div class="box">
-            <h1>Hackateam Login</h1>
+            <h1>SongBird Login</h1>
             <input type="text" id="loginemail" placeholder="Email">
             <input type="password" id="loginpassword" placeholder="Password">
             <input type="submit" onclick="toggleSignIn()" id="quickstart-sign-in" value="Login">
 
             <div class="bottom-text">
-                Don't have account? <a href="signup.html">Sign up</a>
+                Don't have account? <a href="signup.html">Sign up</a><br /><br /><br />
+                Login as <a href="userlogin.html">another type</a>
             </div>
         </div>
     </section>
@@ -31,15 +34,15 @@
     <script>
     // Your web app's Firebase configuration
     var firebaseConfig = {
-        apiKey: "AIzaSyCU39Ta1HE6W76vmWWrbYhtwdCJ2BQFRuw",
-        authDomain: "hackathonmatchuser-ae625.firebaseapp.com",
-        databaseURL: "https://hackathonmatchuser-ae625.firebaseio.com",
-        projectId: "hackathonmatchuser-ae625",
-        storageBucket: "hackathonmatchuser-ae625.appspot.com",
-        messagingSenderId: "214192263433",
-        appId: "1:214192263433:web:ff6f9790fa5db1670983d8",
-        measurementId: "G-3ZXZFWX2BJ"
-    };
+            apiKey: "AIzaSyD3c-oXqcJymdtt_Ou1LlVX0XwKGJqACFI",
+            authDomain: "songbird-180a0.firebaseapp.com",
+            databaseURL: "https://songbird-180a0.firebaseio.com",
+            projectId: "songbird-180a0",
+            storageBucket: "songbird-180a0.appspot.com",
+            messagingSenderId: "466577404888",
+            appId: "1:466577404888:web:6752375e0175c39af4b8ad",
+            measurementId: "G-G61252WJTY"
+            };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
@@ -84,7 +87,7 @@
         document.getElementById('quickstart-sign-in').disabled = false;
         fireauth.onAuthStateChanged(user => {
         if(user) {
-        window.location = 'homepage.html'; //After successful login, user will be redirected to home.html
+        window.location = 'aboutus.html'; //After successful login, user will be redirected to home.html
   }
 });
         }

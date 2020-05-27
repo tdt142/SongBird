@@ -1,0 +1,143 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SongBird</title>
+	<link rel="stylesheet" href="style.css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
+</head>
+
+<body>
+	<section>
+		<div class="box">
+			<h1>Create an account</h1>
+			<h3>User</h3>
+			<div>
+				<input type="email" id="signupemail" placeholder="Email">
+			</div>
+			<div>
+				<input type="text" id="signupusername" placeholder="Username">
+			</div>
+			<div>
+				<input type="password" id="signuppassword" placeholder="Password">
+			</div>
+			<div>
+				<input type="submit" onclick="handleSignUp(); getUserID();" value="Create">
+			</div>
+			<div class="bottom-text"> Already had an acount? <a href="login.html">Log in</a>
+			</div>
+		</div>
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>
+		<!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+		<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+			apiKey: "AIzaSyD3c-oXqcJymdtt_Ou1LlVX0XwKGJqACFI",
+			authDomain: "songbird-180a0.firebaseapp.com",
+			databaseURL: "https://songbird-180a0.firebaseio.com",
+			projectId: "songbird-180a0",
+			storageBucket: "songbird-180a0.appspot.com",
+			messagingSenderId: "466577404888",
+			appId: "1:466577404888:web:6752375e0175c39af4b8ad",
+			measurementId: "G-G61252WJTY"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();
+		let firestore = firebase.firestore();
+		let fireauth = firebase.auth();
+		console.log("Cloud Firestores Loaded");
+
+		function handleSignUp() {
+			var email = document.getElementById('signupemail').value;
+			var password = document.getElementById('signuppassword').value;
+			if(email.length < 4) {
+				alert('Please enter an email address.');
+				return;
+			}
+			if(password.length < 4) {
+				alert('Please enter a password.');
+				return;
+			}
+			// Create user with email and pass.
+			// [START createwithemail]
+			fireauth.createUserWithEmailAndPassword(email, password).catch(function(error) {
+				// Handle Errors here.
+				var errorCode = error.code;
+				var errorMessage = error.message;
+				// [START_EXCLUDE]
+				if(errorCode == 'auth/weak-password') {
+					alert('The password is too weak.');
+				} else {
+					alert(errorMessage);
+				}
+				console.log(error);
+				// [END_EXCLUDE]
+			});
+			// [END createwithemail]
+		}
+		/**
+		 * Sends an email verification to the user.
+		 */
+		function sendEmailVerification() {
+			// [START sendemailverification]
+			fireauth.currentUser.sendEmailVerification().then(function() {
+				// Email Verification sent!
+				// [START_EXCLUDE]
+				alert('Email Verification Sent!');
+				// [END_EXCLUDE]
+			});
+			// [END sendemailverification]
+		}
+
+		function getUserID() {
+			fireauth.onAuthStateChanged(function(user) {
+				if(user) {
+                    var user = fireauth.currentUser;
+					if(user != null) {
+						user.providerData.forEach(function() {
+							console.log("  Provider-specific UID: " + user.uid);
+							const UName = document.getElementById('signupusername');
+							const UEmail = document.getElementById('signupemail');
+							console.log(UName.value, UEmail.value, user.uid);
+							firestore.collection("User").doc(user.uid).set({
+								name_user: UName.value,
+								email_user: UEmail.value
+							}).then(function() {
+								console.log("Document successfully written!");
+							}).catch(function(error) {
+								console.error("Error writing document: ", error);
+							})
+						});
+						var reference = firestore.collection("User").doc(user.uid);
+						reference.get().then(function(documentSnapshot) {
+							if(documentSnapshot.exists) {
+								window.location = 'aboutus.html'; //After successful login, user will be redirected to aboutus.html
+								console.log('login success');
+							} else {
+                                if(errorCode === 'email-already-in-use') {
+                                    alert('Other account has been created with this email address.')
+                                } else {
+                                    console.log(errorMessage);
+                                    alert(errorMessage);
+                                }
+							}
+						});
+					}
+				} else {
+					// No user is signed in.
+					console.log("not yet log in")
+				}
+			});
+		}
+		</script>
+	</section>
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SongBird</title>
+    <link rel="stylesheet" href="mainpages.css">
+    <link rel="stylesheet" href="freeformatter-out.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet"> 
+    <style>
+        a { color: #FFFFFF; } 
+    </style>
+</head>
+<body>
+    <section>
+        <div>
+            <div class='navbar'>
+                <div class='logo'>
+                SongBird |
+                </div>           
+                <div class='navbar-item'>
+                    <nav>
+                        <ul>
+                            <li><a href="homepage.html">Home</a></li>
+                            <li><a href="aboutus.html">About</a></li>
+                            <li><a href="userlogin.html">Sign Out</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br />
+    <form action="song.html">
+        <div>
+            <p>Please choose the <u>Category</u></p>
+        </div>
+        
+        <div>    
+        <input type="submit" id="selectcategory1" value="Popular" onclick="passvalues1()" />
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory2" value="Country" onclick="passvalues2()">
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory3" value="EDM" onclick="passvalues3()">
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory4" value="Folk" onclick="passvalues4()">
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory5" value="Heavy Metal" onclick="passvalues5()">
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory6" value="Hip-hop" onclick="passvalues6()">
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory7" value="Jazz" onclick="passvalues7()">
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory8" value="Pop" onclick="passvalues8()">
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory9" value="Rap" onclick="passvalues9()">
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory10" value="Rock" onclick="passvalues10()">
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory11" value="Soul" onclick="passvalues11()">
+        </div>
+        <br />
+        <div>    
+            <input type="submit" id="selectcategory12" value="Classical" onclick="passvalues12()">
+        </div>
+        <br />
+    </form>
+        <script>
+            function passvalues1() {
+                var chosenone= document.getElementById("selectcategory1").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues2() {
+                var chosenone= document.getElementById("selectcategory2").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues3() {
+                var chosenone= document.getElementById("selectcategory3").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues4() {
+                var chosenone= document.getElementById("selectcategory4").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues5() {
+                var chosenone= document.getElementById("selectcategory5").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues6() {
+                var chosenone= document.getElementById("selectcategory6").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues7() {
+                var chosenone= document.getElementById("selectcategory7").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues8() {
+                var chosenone= document.getElementById("selectcategory8").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues9() {
+                var chosenone= document.getElementById("selectcategory9").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues10() {
+                var chosenone= document.getElementById("selectcategory10").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues11() {
+                var chosenone= document.getElementById("selectcategory11").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+            function passvalues12() {
+                var chosenone= document.getElementById("selectcategory12").value;
+                localStorage.setItem("category", chosenone);
+                return False;
+            }
+        </script>
+</body>
