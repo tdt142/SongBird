@@ -1,10 +1,19 @@
+<!--
+   Name of file: category.html
+   Purpose: Show songs (Open for public)
+   Version: 1.0
+   Date: 5/30/2020
+   Author: David Tran
+   Dependencies: login.html, categories.html
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>SongBird</title>
+    <title>SongBird - Choose song</title>
 	<link rel="stylesheet" href="mainpages.css">
 	<link rel="stylesheet" href="freeformatter-out.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -26,17 +35,18 @@
 				<div class='navbar-item'>
 					<nav>
 						<ul>
-							<li><a href="aboutus.html">Home</a></li>
+							<li><a href="homepage.html">Home</a></li>
 							<li><a href="category.html">Category</a></li>
-							<li><a href="aboutus.html">About</a></li>
 							<li><a href="userlogin.html">Sign Out</a></li>
 						</ul>
 					</nav>
 				</div>
 			</div>
 		</div>
-	</section> Welcome .... <span id="result"></span>
+	</section>
+	 Welcome .... <span id="result"></span>
 	<br />
+	<!-- DOM elements for songs -->
 	<p id="demo"></p>
 	<a id="songlist"></a>
 
@@ -47,6 +57,7 @@
 	<!-- The core Firebase JS SDK is always required and must be listed first -->
 	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>
 	<!-- TODO: Add SDKs for Firebase products that you want to use
         https://firebase.google.com/docs/web/setup#available-libraries -->
 	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
@@ -66,25 +77,38 @@
 	var app = firebase.initializeApp(firebaseConfig);
 	db = firebase.firestore(app);
 	firebase.analytics();
+	firebase.auth().onAuthStateChanged((user) => { //Check if the user log in yet
+            if (user) {
+                // console.log("Here is userID " + user.uid);
+                userID = user.uid;
+            } else {
+                console.log("Cannot get userid");
+                alert("Please log in again");
+                window.location.assign("login.html") //Alert and move to login page if not yet log in
+            }
+        });
 	let firestore = firebase.firestore();
 	console.log("Cloud Firestores Loaded");
 
-	window.onload = async function outsong() {
+	window.onload = async function outsong() { //load function when the page load
+		
+		//Get category data from local storage
 		var selected = localStorage.getItem("category")
 		document.getElementById("result").innerHTML = selected;
 		var result = [];
 		if(selected == "Popular") {
+			//Wait database to return songs of the category
 			await db.collection("Song").doc("Popular").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
-					result.push(doc.data());
+					// console.log(doc.id, " => ", doc.data());
+					result.push(doc.data()); //push song data to list
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on the song list length 
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -93,21 +117,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "Country") {
 			await db.collection("Song").doc("Country").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -116,21 +140,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "EDM") {
 			await db.collection("Song").doc("EDM").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -139,21 +163,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "Folk") {
 			await db.collection("Song").doc("Folk").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -162,21 +186,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node);//Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "Heavy Metal") {
 			await db.collection("Song").doc("Heavy Metal").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -185,21 +209,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "Hip-hop") {
 			await db.collection("Song").doc("Hip-hop").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -208,21 +232,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "Jazz") {
 			await db.collection("Song").doc("Jazz").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -231,21 +255,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "Pop") {
 			await db.collection("Song").doc("Pop").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -254,21 +278,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "Rap") {
 			await db.collection("Song").doc("Rap").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -277,21 +301,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "Rock") {
 			await db.collection("Song").doc("Rock").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -300,21 +324,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "Soul") {
 			await db.collection("Song").doc("Soul").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -323,21 +347,21 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else if(selected == "Classical") {
 			await db.collection("Song").doc("Classical").collection("songs").get().then(function(querySnapshot) {
 				querySnapshot.forEach(function(doc) {
 					// doc.data() is never undefined for query doc snapshots
-					console.log(doc.id, " => ", doc.data());
+					// console.log(doc.id, " => ", doc.data());
 					result.push(doc.data());
 				});
 			});
-			console.log(result.length);
+			// console.log(result.length);
 			const songList = document.getElementById("songlist");
-			for(let a = 0; a < result.length; a++) {
-				var node = document.createElement("li");
+			for(let a = 0; a < result.length; a++) { //create loop base on song list length
+				var node = document.createElement("li"); //create DOM elements
 				
 				var link = document.createElement('input');
 				link.setAttribute('type','submit');
@@ -346,28 +370,19 @@
 				link.innerText = result[a].song_name;
 				
 				node.appendChild(link);
-				songList.appendChild(node);
-				console.log(result[a].song_name);
+				songList.appendChild(node); //Append DOM data to HTML elements
+				// console.log(result[a].song_name);
 			}
 		} else {
 			alert("Other")
 		}
 	}
-	// document.getElementById("songlist").addEventListener("click", callback, true);
-	function hello(lnk) {
 
-	 	// // var node = document.createElement("p");
-		// // var textnode = document.createTextNode(result[a].song_name);
-		alert(lnk.getAttribute('value'));
+	function hello(lnk) {
+		//Get chosen song and save to local storage
 		chosentwo = lnk.getAttribute('value')
 		localStorage.setItem("song", chosentwo);
-		window.location.assign("hearsong.html");
+		window.location.assign("hearsong.html"); //Load new page
 
-	// 	alert("clicked");
-
-	// return false;
-			// document.getElementById("songlist").setAttribute("value", "In Progress");
-			// var x = document.getElementById("songlist").getAttribute("value");
-			// alert(x)
 	}
 	</script>

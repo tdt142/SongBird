@@ -1,77 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!--
+   Name of file: index.html
+   Purpose: Login page (Open for public)
+   Version: 1.0
+   Date: 5/18/2020
+   Author: David Tran
+   Dependencies: n/a
+-->
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SongBird</title>
-    <link rel="stylesheet" href="mainpages.css">
-    <link rel="stylesheet" href="freeformatter-out.css">
-    <script type="text/JavaScript" src="city_state.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet"> 
-    <style>
-        a { color: #FFFFFF; } 
-    </style>
-</head>
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <meta name="HandheldFriendly" content="true">
+      <title>SongBird - Login</title>
+      <link rel="stylesheet" href="style.css">
+      <link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
+   </head>
 <body>
-	<section>
-		<div>
-			<div class='navbar'>
-				<div class='logo'> SongBird | </div>
-				<div class='navbar-item'>
-					<nav>
-						<ul>
-							<li><a href="homepage.html">Home</a></li>
-							<li><a href="category.html">Category</a></li>
-							<li><a href="aboutus.html">About</a></li>
-							<li><a href="userlogin.html">Sign Out</a></li>
-						</ul>
-					</nav>
-				</div>
-			</div>
-        </div>
-        </section>
-    <div class="fsy-angle-slide d-none d-sm-block">
-        <div class="fsy-angle-area">
-    
-                    <div class="fsy-item fsy item-1" onclick="location.href=''" >
-                        <div class="fsy-img">
-                            <img src="images/david.JPG" alt="David Tran slider image" />
-                        </div>
-                        <p><a href="" target="_blank">David Tran</a></p>
-                    </div>
-                    
-            
-                    <div class="fsy-item fsy item-1" onclick="location.href=''" >
-                        <div class="fsy-img">
-                            <img src="images/mark.JPG" alt="Mark Wang slider image" />
-                        </div>
-                        <p><a href="" target="_blank">Mark Wang</a></p>
-                    </div>
-                    
-            
-                    <div class="fsy-item fsy item-1" onclick="location.href=''" >
-                        <div class="fsy-img">
-                            <img src="images/cody.jpg" alt="Cody Ruth slider image" />
-                        </div>
-                        <p><a href="" target="_self">Cody Ruth</a></p>
-                    </div>
-                    
-            
-                    <div class="fsy-item fsy item-1" onclick="location.href=''" >
-                        <div class="fsy-img">
-                            <img src="images/manish.jpg" alt="Manish Patel slider image" />
-                        </div>
-                        <p><a href="" target="_self">Manish Patel</a></p>
-                    </div>
-                    
+    <section>
+        <div class="box">
+            <h1>SongBird Login</h1>
 
+            <!-- Login box section -->
+            <input type="text" id="loginemail" placeholder="Email">
+            <input type="password" id="loginpassword" placeholder="Password">
+            <input type="submit" onclick="toggleSignIn()" id="quickstart-sign-in" value="Login">
+
+            <div class="bottom-text">
+                Don't have account? <a href="signup.html">Sign up</a><br /><br /><br />
+                Login as <a href="userlogin.html">another type</a>
+            </div>
         </div>
-    </div>
+    </section>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+
+    <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+            apiKey: "AIzaSyD3c-oXqcJymdtt_Ou1LlVX0XwKGJqACFI",
+            authDomain: "songbird-180a0.firebaseapp.com",
+            databaseURL: "https://songbird-180a0.firebaseio.com",
+            projectId: "songbird-180a0",
+            storageBucket: "songbird-180a0.appspot.com",
+            messagingSenderId: "466577404888",
+            appId: "1:466577404888:web:6752375e0175c39af4b8ad",
+            measurementId: "G-G61252WJTY"
+            };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+        let firestore = firebase.firestore();
+        let fireauth = firebase.auth();
+        console.log("Cloud Firestores Loaded");
+
+        function toggleSignIn() {
+        if (fireauth.currentUser) {
+            // [START signout]
+            fireauth.signOut();
+            // [END signout]
+        } else {
+            var email = document.getElementById('loginemail').value;
+            var password = document.getElementById('loginpassword').value;
+            if (email.length < 4) {
+            alert('Please enter an email address.');
+            return;
+            }
+            if (password.length < 4) {
+            alert('Please enter a password.');
+            return;
+            }
+            // Sign in with email and pass.
+            // [START authwithemail]
+            fireauth.signInWithEmailAndPassword(email, password).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // [START_EXCLUDE]
+            if (errorCode === 'auth/wrong-password') {
+                alert('Wrong password.');
+            } else {
+                alert(errorMessage);
+            }
+            console.log(error);
+            document.getElementById('quickstart-sign-in').disabled = false;
+            // [END_EXCLUDE]
+            });
+            // [END authwithemail]
+        }
+        document.getElementById('quickstart-sign-in').disabled = false;
+        fireauth.onAuthStateChanged(user => {
+        if(user) {
+        window.location = 'homepage.html'; //After successful login, user will be redirected to homepage.html
+  }
+});
+        }
+
+</script>
+
+</body>
+</html>

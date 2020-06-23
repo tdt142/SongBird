@@ -1,52 +1,98 @@
+<!--
+   Name of file: hearsong.html
+   Purpose: Show video and reviews. Users can input review and submit (Open for public)
+   Version: 1.0
+   Date: 6/7/2020
+   Author: David Tran
+   Dependencies: category.html, song.html, userlogin.html
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>SongBird</title>
-	<link rel="stylesheet" href="mainpages.css">
-	<link rel="stylesheet" href="freeformatter-out.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-	<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<!-- Popper JS -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-	<!-- Latest compiled JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-	<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SongBird - Listen to music</title>
+    <link rel="stylesheet" href="mainpages.css">
+    <link rel="stylesheet" href="freeformatter-out.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create two equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: auto;
+            /* Should be removed. Only for demonstration */
+        }
+
+        /* .column .right {
+				float: right;
+			} */
+        .column h2 {
+            float: left;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
 </head>
 
 <body>
-	<section>
-		<div>
-			<div class='navbar'>
-				<div class='logo'> SongBird | </div>
-				<div class='navbar-item'>
-					<nav>
-						<ul>
-							<li><a href="homepage.html">Home</a></li>
-							<li><a href="category.html">Category</a></li>
-							<li><a href="aboutus.html">About</a></li>
-							<li><a href="userlogin.html">Sign Out</a></li>
-						</ul>
-					</nav>
-				</div>
-			</div>
-		</div>
+    <section>
+        <div>
+            <div class='navbar'>
+                <div class='logo'> SongBird | </div>
+                <div class='navbar-item'>
+                    <nav>
+                        <ul>
+                            <li><a href="homepage.html">Home</a></li>
+                            <li><a href="category.html">Category</a></li>
+                            <li><a href="userlogin.html">Sign Out</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
 	</section>
-	<div>
-	<h1 id="name" style="text-align: center"></h1> 
-	<h2 id="singername" style="text-align: center"></h2>
-	<iframe id="songvideo" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-	<p> This code allows for the embedding of YouTube videos directly into a webpage.<br> By embedding a video instead of natively hosting an audio file, we can avoid copyright issues associated with allowing people to hear the music for free. </p>
-	</div>
+	<!-- Set up DOM elements  -->
+    <div>
+        <h1 id="name" style="text-align: center"></h1>
+        <h2 id="singername" style="text-align: center"></h2>
+        <iframe id="songvideo" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <br />
+        <textarea id="content"></textarea>
+        <br />
+        <input type="submit" id="submitreview" onclick="submitreview()" value="Submit Review">
+        <p><b><u>Disclaimer: </u></b> This code allows for the embedding of YouTube videos directly into a webpage.<br> By embedding a video instead of natively hosting an audio file, we can avoid copyright issues associated with allowing people to hear the music for free. </p>
+    </div>
+
+    <div class="column" id="reviewlist" style="background-color:#aaa;">
+    </div>
+	
 	<!-- The core Firebase JS SDK is always required and must be listed first -->
 	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
 	<!-- TODO: Add SDKs for Firebase products that you want to use
         https://firebase.google.com/docs/web/setup#available-libraries -->
-	<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
 	<script>
 	// Your web app's Firebase configuration
 	var firebaseConfig = {
@@ -63,17 +109,37 @@
 	var app = firebase.initializeApp(firebaseConfig);
 	db = firebase.firestore(app);
 	firebase.analytics();
+
+	// Check if the user login or not
+	firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // console.log("Here is userID " + user.uid);
+                userID = user.uid;
+            } else {
+                console.log("Cannot get userid");
+                alert("Please log in again");
+                window.location.assign("login.html") //Alert and move to login page if not yet login
+            }
+        });
 	let firestore = firebase.firestore();
 	console.log("Cloud Firestores Loaded");
+
+
+	//Get category and song data from local storage
+
 	window.onload = async function outdetails() {
 		var selectedone = localStorage.getItem("category");
 		var selectedtwo = localStorage.getItem("song");
-		// alert(selectedone);
-		// alert(selectedtwo);
+
+		await foo() //wait function foo to finish before running
+		
+		// Check category value to get into right database directory
+
 		if(selectedone == "Popular") {
 			await db.collection("Song").doc("Popular").collection("songs").doc(selectedtwo).get().then(function(doc) {
+
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data());
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -83,7 +149,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -95,7 +161,7 @@
 		} else if (selectedone == "Country") {
 			await db.collection("Song").doc("Country").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -105,7 +171,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -117,7 +183,7 @@
 		} else if (selectedone == "Classical") {
 			await db.collection("Song").doc("Classical").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -127,7 +193,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -139,7 +205,7 @@
 		} else if (selectedone == "EDM") {
 			await db.collection("Song").doc("EDM").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -149,7 +215,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -161,7 +227,7 @@
 		} else if (selectedone == "Folk") {
 			await db.collection("Song").doc("Folk").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -171,7 +237,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -183,7 +249,7 @@
 		} else if (selectedone == "Heavy Metal") {
 			await db.collection("Song").doc("Heavy Metal").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -193,19 +259,19 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
 				}
 
 			}).catch(function(error) {
-			console.log("Error getting document:", error);
+			console.log("Error getting document:", error); //catch error
 		});
 		} else if (selectedone == "Hip-hop") {
 			await db.collection("Song").doc("Hip-hop").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -215,7 +281,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -227,7 +293,7 @@
 		} else if (selectedone == "Jazz") {
 			await db.collection("Song").doc("Jazz").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -237,7 +303,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -249,7 +315,7 @@
 		} else if (selectedone == "Pop") {
 			await db.collection("Song").doc("Pop").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -259,7 +325,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -271,7 +337,7 @@
 		} else if (selectedone == "Rap") {
 			await db.collection("Song").doc("Rap").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -281,7 +347,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -293,7 +359,7 @@
 		} else if (selectedone == "Rock") {
 			await db.collection("Song").doc("Rock").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -303,7 +369,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -315,7 +381,7 @@
 		} else if (selectedone == "Soul") {
 			await db.collection("Song").doc("Soul").collection("songs").doc(selectedtwo).get().then(function(doc) {
 				if (doc.exists) {
-					console.log("Document data:", doc.data().youtube_link);
+					// console.log("Document data:", doc.data().youtube_link);
 					const songVideo = document.getElementById("songvideo");
 					var node = document.createElement("a");
 					document.getElementById("name").innerHTML = doc.data().song_name;
@@ -325,7 +391,7 @@
 					document.getElementById("songvideo").src = doc.data().youtube_link;
 					
 					node.appendChild(video);
-					songVideo.appendChild(node);
+					songVideo.appendChild(node); //create DOM elements and append to HTML page
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -338,9 +404,91 @@
 			alert("Other")
 		}
 	}
+	
+	async function foo() {
+		// get local storage data about category and songs
+
+		var selectedone = localStorage.getItem("category");
+		var selectedtwo = localStorage.getItem("song");
+		var contentresult = [];
+
+		// wait for data return from database for corresponding song and category
+		await db.collection("Song").doc(selectedone).collection("songs").doc(selectedtwo).collection("reviews").orderBy("review_date","desc").get().then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc2) {
+					// console.log(doc2.id, " => ", doc2.data());
+					contentresult.push(doc2.data()); //Add retrieved review data to list
+					});
+				})
+				.catch(function(error) {
+					console.log("Error getting documents: ", error); // Catch error
+				});
+				// console.log(contentresult);
+		const reviewlist = document.getElementById("reviewlist");
+		for(let b = 0; b < contentresult.length; b++) {		//loops to create DOM elements base on the size of review list	
+			var node = document.createElement('div'); //create div element
+			
+			var size = document.createElement('h2'); //create h2 element
+			var size2 = document.createElement('h2'); //create h2 element
+			var size3 = document.createElement('p'); //create h2 element
+			var breakpoint = document.createElement('br'); //create br element
+			var anotherbreakpoint = document.createElement('br');
+
+			size.setAttribute('class','left'); //set attribute for DOM elements
+			size2.setAttribute('class','right'); //set attribute for DOM elements
+
+			var text1 = document.createTextNode(contentresult[b].user_name + ' - '); //create text for DOM elements
+			var text2 = document.createTextNode('- ' + contentresult[b].review_date); //create text for DOM elements
+			var text3 = document.createTextNode(contentresult[b].review_content); //create text for DOM elements
+
+			size.appendChild(text1); //Add text to correct DOM element
+			size2.appendChild(text2); //Add text to correct DOM element
+			size3.appendChild(text3); //Add text to correct DOM element
+
+			node.appendChild(size); //Append data to DOM node
+			node.appendChild(size2); //Append data to DOM node
+			node.appendChild(breakpoint); //Append data to DOM node
+			node.appendChild(anotherbreakpoint); //Append data to DOM node
+			node.appendChild(size3); //Append data to DOM node
+			
+			reviewlist.appendChild(node); //Append node to element in HTML by id
+			
+			}
+	}
+
+	async function submitreview() {
+		//Get category and song data from local storage
+		var selectedone = localStorage.getItem("category");
+		var selectedtwo = localStorage.getItem("song");
+		const reviewcontent = document.getElementById("content");
+		var d = new Date();
+		e = d.toLocaleString();
+		g = userID;
+		namelist = [];
+
+		// Wait for database to return name of user
+		await db.collection("User").doc(g).get().then(function(doc3) {
+			if (doc3.exists) {
+				// console.log(doc3.data().name_user);
+				namelist.push(doc3.data()); //Push username to list
+			} else {
+				console.log("nothing here exist");
+			}
+				}).catch(function(error) {
+    	console.log("Error getting document:", error);
+		});
+		var username = namelist[0].name_user;
+		db.collection("Song").doc(selectedone).collection("songs").doc(selectedtwo).collection("reviews").doc().set({
+			//Add review data to database
+
+			review_content: reviewcontent.value,
+			review_date: e,
+			user_id: userID,
+			user_name: username,
+		})
+		document.getElementById("content").value = "";
+		foo(); //Call foo function so DOM can automatically update when new reviews are inserted.
+	}
 	</script>
-
-
 
 </body>
 

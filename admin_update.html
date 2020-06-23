@@ -1,3 +1,12 @@
+<!--
+   Name of file: admin_update.html
+   Purpose: Update database (For admin, team members only)
+   Version: 1.0
+   Date: 5/22/2020
+   Author: David Tran
+   Dependencies: admin_login.html
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +14,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="mainpages.css">
-		<title>SongBird</title>
+		<title>SongBird admin</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 		<!-- jQuery library -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -41,6 +50,7 @@
             <h1 class="name">Song Bird</h1>
             <p style="color:red" align="stretch"><strong>* Please remember to fill in all the fields</strong></p>
 			<div class="radio">
+				<!-- Button for different categories -->
 				<div>
                     <input type="radio" name="Rock" id="Rock" value="Rock"><label for="Rock">Rock</label><br /></div>
                     <div><input type="radio" name="Classical" id="Classical" value="Classical"><label for="Classcial">Classical</label><br /></div>
@@ -55,22 +65,8 @@
                     <div><input type="radio" name="Rap" id="Rap" value="Rap"><label for="Rap">Rap</label><br /></div>
                     <div><input type="radio" name="Soul" id="Soul" value="Soul"><label for="Soul">Soul</label><br /></div>
 			</div>
-			<!-- <select id="category" name="category">
-                    <option disabled selected value> -- select an option -- </option>
-                    <option value="Rock">Rock</option>
-                    <option value="Classical">Classical</option>
-                    <option value="Country">Country</option>
-                    <option value="Folk">Folk</option>
-                    <option value="EDM">EDM</option>
-                    <option value="Heavy Metal">Heavy Metal</option>
-                    <option value="Hip-hop">Hip-hop</option>
-                    <option value="Jazz">Jazz</option>
-                    <option value="Pop">Pop</option>
-                    <option value="Popular">Popular</option>
-                    <option value="Rap">Rap</option>
-                    <option value="Soul">Soul</option>
-                </select> -->
-			<div class="box">
+
+			<div class="box"> <!--Enter details for the song-->
 				<div>
 					<input type="text" id="songname" placeholder="Song Name" required>
 				</div>
@@ -90,11 +86,12 @@
 			</form>
 		</section>
 		<!-- The core Firebase JS SDK is always required and must be listed first -->
-		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>
 		<!-- TODO: Add SDKs for Firebase products that you want to use
-        https://firebase.google.com/docs/web/setup#available-libraries -->
-		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+		   https://firebase.google.com/docs/web/setup#available-libraries -->
+		  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
 		<script>
 		// Your web app's Firebase configuration
 		var firebaseConfig = {
@@ -109,9 +106,21 @@
 		};
 		// Initialize Firebase
 		firebase.initializeApp(firebaseConfig);
-		firebase.analytics();
-		let firestore = firebase.firestore();
-		console.log("Cloud Firestores Loaded");
+            firebase.analytics();
+             let firestore = firebase.firestore();
+             let fireauth = firebase.auth();
+             console.log("Cloud Firestores Loaded");
+		firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // console.log("Here is userID " + user.uid);
+                userID = user.uid;
+            } else {
+                console.log("Cannot get userid");
+                alert("Please log in again");
+                window.location.assign("admin_login.html")
+            }
+        });
+
 
 		function Ulog() {
 			//Saving data
@@ -120,11 +129,11 @@
 			const singernames = document.getElementById('singername');
 			const youtubelink = document.getElementById('ytlink');
 			const audiolink = document.getElementById('aulink');
-			console.log(songnames.value, singernames.value, youtubelink.value, audiolink.value);
-			// var e = document.getElementById("category");
-			// var strUser = e.options[e.selectedIndex].value;
+			// console.log(songnames.value, singernames.value, youtubelink.value, audiolink.value);
+			
+			//Check which category is checked
 			if(document.getElementById('Rock').checked) {
-				firestore.collection("Song").doc("Rock").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Rock").collection("songs").doc(songnames.value).set({ //add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -136,7 +145,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else if(document.getElementById('Classical').checked) {
-				firestore.collection("Song").doc("Classical").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Classical").collection("songs").doc(songnames.value).set({ //add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -148,7 +157,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else if(document.getElementById('Country').checked) {
-				firestore.collection("Song").doc("Country").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Country").collection("songs").doc(songnames.value).set({//add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -160,7 +169,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else if(document.getElementById('EDM').checked) {
-				firestore.collection("Song").doc("EDM").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("EDM").collection("songs").doc(songnames.value).set({//add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -172,7 +181,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else if(document.getElementById('Folk').checked) {
-				firestore.collection("Song").doc("Folk").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Folk").collection("songs").doc(songnames.value).set({//add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -184,7 +193,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else if(document.getElementById('Heavy Metal').checked) {
-				firestore.collection("Song").doc("Heavy Metal").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Heavy Metal").collection("songs").doc(songnames.value).set({//add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -196,7 +205,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else if(document.getElementById('Hip-hop').checked) {
-				firestore.collection("Song").doc("Hip-hop").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Hip-hop").collection("songs").doc(songnames.value).set({ //add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -208,7 +217,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else if(document.getElementById('Jazz').checked) {
-				firestore.collection("Song").doc("Jazz").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Jazz").collection("songs").doc(songnames.value).set({ //add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -220,7 +229,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else if(document.getElementById('Pop').checked) {
-				firestore.collection("Song").doc("Pop").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Pop").collection("songs").doc(songnames.value).set({ //add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -232,7 +241,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else if(document.getElementById('Popular').checked) {
-				firestore.collection("Song").doc("Popular").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Popular").collection("songs").doc(songnames.value).set({ //add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -244,7 +253,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else if(document.getElementById('Rap').checked) {
-				firestore.collection("Song").doc("Rap").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Rap").collection("songs").doc(songnames.value).set({ //add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,
@@ -256,7 +265,7 @@
 					console.error("Error writing document: ", error);
 				})
 			} else {
-				firestore.collection("Song").doc("Soul").collection("songs").doc(songnames.value).set({
+				firestore.collection("Song").doc("Soul").collection("songs").doc(songnames.value).set({ //add data to database
 					song_name: songnames.value,
 					singer_name: singernames.value,
 					youtube_link: youtubelink.value,

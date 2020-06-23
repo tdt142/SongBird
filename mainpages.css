@@ -24,6 +24,24 @@
 		-webkit-text-size-adjust: none
 	}
 }
+
+/* .generated {
+    width: 50%;
+    height: auto;
+    border:1px solid red;
+}
+
+.left {
+	float: left;
+} */
+/* .right {
+	float: right;
+} */
+
+.center {
+    float: left;
+}
+
 body {
     margin-left: 10px;
 }
@@ -78,6 +96,8 @@ section{
         background-position: 0 50%;
     }
 }
+
+
 
 nav ul {
     margin: 0;

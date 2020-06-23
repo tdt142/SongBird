@@ -1,15 +1,25 @@
+<!--
+   Name of file: admin_login.html
+   Purpose: Login (For admin, team members only)
+   Version: 1.1
+   Date: 5/15/2020
+   Author: David Tran
+   Dependencies: admin_update.html
+-->
+
 <html>
    <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
       <meta name="HandheldFriendly" content="true">
-      <title>SongBird</title>
+      <title>SongBird admin</title>
       <link rel="stylesheet" href="style.css">
       <link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
    </head>
    <body>
       <section>
+         <!-- Format login box -->
          <div class="box">
             <h1>Admin Login</h1>
             <input type="text" id="loginemail" placeholder="Email">
@@ -17,7 +27,7 @@
             <input type="submit" onclick="toggleSignIn()" id="quickstart-sign-in" value="Login">
             <div class="bottom-text">
                <br />
-               <a href="userlogin.html">Login as another type</a>
+               <a href="userlogin.html">Login as another type</a>         <!-- Choose other type of login -->
             </div>
          </div>
       </section>
@@ -84,7 +94,7 @@
              document.getElementById('quickstart-sign-in').disabled = false;
              fireauth.onAuthStateChanged(user => {
              if(user) {
-               var user = fireauth.currentUser;
+               var user = fireauth.currentUser;         //Check if user login or not
 
              if(user != null){
                 
@@ -95,7 +105,7 @@
                      window.location = 'admin_update.html'; //After successful login, user will be redirected to home.html
                      console.log('login success');
                     } else {
-                     window.location = 'admin_login.html';
+                     window.location = 'admin_login.html'; //Move to admin_login page if login fail
                      console.log('login failed');
                     }
                  }

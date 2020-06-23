@@ -1,9 +1,18 @@
+<!--
+   Name of file: signup.html
+   Purpose: Sign up (Open for public)
+   Version: 1.0
+   Date: 5/18/2020
+   Author: David Tran
+   Dependencies: login.html
+-->
+
 <html>
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>SongBird</title>
+    <title>SongBird - Sign up</title>
 	<link rel="stylesheet" href="style.css">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet">
 </head>
@@ -118,7 +127,7 @@
 						var reference = firestore.collection("User").doc(user.uid);
 						reference.get().then(function(documentSnapshot) {
 							if(documentSnapshot.exists) {
-								window.location = 'aboutus.html'; //After successful login, user will be redirected to aboutus.html
+								window.location = 'homepage.html'; //After successful login, user will be redirected to aboutus.html
 								console.log('login success');
 							} else {
                                 if(errorCode === 'email-already-in-use') {
